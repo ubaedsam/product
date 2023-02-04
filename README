@@ -1,0 +1,83 @@
+1. Install Laravel versi 8 :
+script :
+composer create-project laravel/laravel:^8.0 product --prefer-dist (untuk menjalankan script ini harus menginstall composer di komputer masing-masing)
+fungsi :
+berfungsi untuk menginstall bundle program project laravel versi 8 dengan data lengkap sebagai berikut contohnya sudah mendapatkan key pada program
+
+2. create table stocks, products, kategoris di dalam program laravel versi 8 lewat migration :
+script :
+- php artisan make:migration create_stocks_table (berfungsi untuk membuat tabel stocks di dalam program lewat migration)
+Data : id, product_id, stock, timestamps, dan foreign key product_id (yang terhubung ke tabel id products)
+- php artisan make:migration create_products_table (berfungsi untuk membuat tabel products di dalam program lewat migration)
+Data : id, kategori_id, tahun_keluaran, warna, harga, timestamps, dan foreign key kategori_id (yang terhubung ke tabel id kategoris)
+- php artisan make:migration create_kategoris_table (berfungsi untuk membuat tabel product di dalam program lewat migration)
+Data : id, nama, deskripsi, timestamps
+
+3. jalankan perintah script php artisan migrate untuk menyimpan data table ke dalam database
+
+4. create factory stocks, products, kategoris di dalam program laravel versi 8 lewat factory :
+script :
+- php artisan make:factory StockFactory ( berfungsi untuk membuat data sembarang/palsu pada table stocks)
+- php artisan make:factory ProductFactory ( berfungsi untuk membuat data sembarang/palsu pada table products)
+- php artisan make:factory KategorisFactory ( berfungsi untuk membuat data sembarang/palsu pada table kategoris)
+
+5. Setelah mengisi data pada file factory lakukan seeding terlebih dahulu untuk menyimpan data sembarang/palsu tersebut :
+script :
+php artisan db:seed
+Data seed stock
+// Menambah data stock sebanyak 5 data
+Stock::factory(5)->create();
+
+// Menambah data product sebanyak 5 data
+Product::factory(5)->create();
+
+// Menambah data kategori sebanyak 5 data
+Kategoris::factory(5)->create();
+
+6. buatlah model dan controller stocks, products dan kategoris di dalam program :
+script :
+- php artisan make:controller StockController --model=Stock --resource
+- php artisan make:controller ProductController --model=Product --resource
+- php artisan make:controller KategorisController --model=Kategoris --resource
+
+7. install library laravel sanctum di dalam program dan konfigurasi datanya
+script :
+- composer require laravel/sanctum
+Konfigurasi :
+- Atur Kernel
+- Atur Route
+
+8. Buat File Resource stocks, products dan kategoris di dalam program untuk melakukan pengolahan data lewat API (REST API)
+- php artisan make:resource StockResource
+- php artisan make:resource ProductResource
+- php artisan make:resource KategorisResource
+
+9. membuat file auth controller untuk proses sistem login untuk mengakses pengolahan data stocks, products dan kategoris lewat API
+- php artisan make:controller AuthController --resource
+
+10. lakukan proses sistem login terlebih dahulu sebelum melakukan pengolahan data lewat API :
+Register
+- pertama method harus post
+- kedua url (http://127.0.0.1:8000/api/register)
+- ketiga pada headers yaitu key (Accept) value (application/json)
+- keempat masukan data register ke dalam body berbentuk json (untuk menambah user)
+- kelima send (untuk mengirim request data lewat api)
+
+Login
+- pertama method harus post
+- kedua url (http://127.0.0.1:8000/api/login)
+- ketiga pada headers yaitu key (Accept) value (application/json)
+- keempat masukan data login yaitu email dan password ke dalam body pada form-data
+- kelima send (untuk mengirim request data lewat api sekaligus mendapatkan value token key untuk mengelola data setelah login)
+
+Lihat stock product
+- pertama method harus get
+- kedua url (http://localhost:8000/api/stocks)
+- ketiga pada headers yaitu key (Authorization) value (Bearer dan value token key yang di dapatkan setelah melakukan login)
+- keempat send (untuk menampilkan semua data stock yang berelasi ke dalam tabel product
+
+Lihat semua produk per kategori
+- pertama method harus get
+- kedua url (http://localhost:8000/api/products/3)
+- ketiga pada headers yaitu key (Authorization) value (Bearer dan value token key yang di dapatkan setelah melakukan login)
+- keempat send (untuk menampilkan semua data product berdasarkan kategori_idnya
